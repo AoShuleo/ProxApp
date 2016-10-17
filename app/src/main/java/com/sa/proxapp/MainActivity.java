@@ -17,7 +17,16 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    View.OnClickListener loginButtonListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(MainActivity.this, AppActivity.class);
+            startActivity(intent);
+        }
+    };
+
     Button reg_button;
+    Button login_button;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,5 +34,8 @@ public class MainActivity extends AppCompatActivity {
 
         reg_button = (Button) findViewById(R.id.reg_button);
         reg_button.setOnClickListener(regButtonListener);
+
+        login_button = (Button) findViewById(R.id.login_button);
+        login_button.setOnClickListener(loginButtonListener);
     }
 }

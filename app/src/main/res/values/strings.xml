@@ -10,4 +10,10 @@
     <string name="r_name_hint">Введите свое имя</string>
     <string name="r_password_hint">Придумайте пароль</string>
     <string name="r_password_rep_hint">Повторите пароль</string>
+    <string name="title_activity_app">AppActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.sa.proxapp.com.sa.ClientClass;
+package com.sa.proxapp.SClient;
 
 /**
  * Created by Android on 14.11.2016 in ProxApp project

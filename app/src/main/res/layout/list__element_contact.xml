@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_collapseParallaxMultiplier="1.0">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="2">
+
+        <TextView
+            android:text="Пусто"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/label_el2"
+            android:gravity="center_vertical|center_horizontal"
+            tools:layout_editor_absoluteY="68dp"
+            tools:layout_editor_absoluteX="21dp" />
+
+        <TextView
+            android:id="@+id/label_el"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Пусто"
+            android:layout_width="match_parent"
+            tools:layout_editor_absoluteY="51dp"
+            tools:layout_editor_absoluteX="21dp"></TextView>
+    </LinearLayout>
+
+    <Button
+        android:text="Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button2"
+        tools:layout_editor_absoluteY="41dp"
+        tools:layout_editor_absoluteX="275dp"
+        android:layout_marginEnd="64dp"
+        android:layout_marginRight="64dp"
+        android:ems="0"
+        android:elevation="1dp" />
+
+</LinearLayout>

@@ -3,7 +3,6 @@ package com.sa.proxapp;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -11,12 +10,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.os.Message;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
-import com.sa.proxapp.com.sa.ClientClass.LoginListener;
+import com.sa.proxapp.com.sa.ClientClass.LoginMeListener;
 import com.sa.proxapp.com.sa.ClientClass.Model;
-import com.sa.proxapp.com.sa.ClientClass.RegistrationListener;
+import com.sa.proxapp.com.sa.ClientClass.Report;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
             switch (typeResponse)
             {
 
-                case 0: //ошибка, в доступе отказано
+                case Report.THE_USER_IS_NOT_EXIST: //ошибка, в доступе отказано
                     AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                     builder.setTitle("Ошибка аутентификации");
                     builder.setCancelable(false);
@@ -58,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
                     dialogError = builder.create();
                     dialogError.show();
                     break;
-                case 1: //все ок
+                case Report.SUCCESSFUL_AUTH: //все ок
                     Intent intent = new Intent(MainActivity.this, AppActivity.class);
                     startActivity(intent);
                     break;
@@ -84,7 +82,23 @@ public class MainActivity extends AppCompatActivity {
 
             if(login.length() > 0 && password.length() > 0) {
                 dialogWaiting.show();
-                model.loginMe(login, password);
+                model.regLoginMeListener(new LoginMeListener(){
+                    @Override
+                    public void handlerEvent(int typeResponse) {
+                        Message message = new Message();
+                        message.arg1 = typeResponse;
+                        mHandler.sendMessage(message);
+                    }
+                });
+                /*model.regLoginMeListener(new LoginMeListener() {
+                    @Override
+                    public void handlerEvent(int typeResponse) {
+
+                    }
+                });*/
+
+               // for(int i = 0; i < 10000000; ++i)
+                    model.loginMe(login, password);
             }
             else
             {
@@ -97,7 +111,6 @@ public class MainActivity extends AppCompatActivity {
                     mes = "Введите логин и пароль";
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setTitle("Ошибка ввода данных");
-                builder.setCancelable(false);
                 builder.setMessage(mes);
                 builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
@@ -135,24 +148,16 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        model.regLoginMeListener(new LoginListener() {
-            @Override
-            public void handleEvent(int typeResponse) {
-                Message message = new Message();
-                message.arg1 = typeResponse;
-                mHandler.sendMessage(message);
 
-            }
-        });
 
 
         dialogBuilder.setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                model.regLoginMeListener(new LoginListener() {
+                model.regLoginMeListener(new LoginMeListener() {
                     @Override
-                    public void handleEvent(int typeResponse) {
+                    public void handlerEvent(int typeResponse) {
 
                     }
                 });

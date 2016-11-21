@@ -1,10 +1,7 @@
-package com.sa.proxapp.com.sa.ClientClass;
-
 /**
- * Created by Android on 17.10.2016 in ProxApp project
- * .
+ * Created by IHaveSomeCookies on 17.10.2016.
  */
-
+package com.sa.proxapp.com.sa.ClientClass;
 public interface RegistrationListener {
-    void handleEvent(int typeResponse);
+    void handlerEvent(int typeResponse);
 }

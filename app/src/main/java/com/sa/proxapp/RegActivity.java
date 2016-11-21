@@ -1,7 +1,6 @@
 package com.sa.proxapp;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
@@ -11,10 +10,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+
 import com.sa.proxapp.com.sa.ClientClass.Contact;
-import com.sa.proxapp.com.sa.ClientClass.LoginListener;
 import com.sa.proxapp.com.sa.ClientClass.Model;
 import com.sa.proxapp.com.sa.ClientClass.RegistrationListener;
+import com.sa.proxapp.com.sa.ClientClass.Report;
 
 public class RegActivity extends AppCompatActivity {
 
@@ -28,6 +28,7 @@ public class RegActivity extends AppCompatActivity {
     Model model;
 
     AlertDialog dialogWaiting;
+    AlertDialog dialogError;
 
 
     android.os.Handler mHandler = new android.os.Handler(Looper.getMainLooper())
@@ -36,12 +37,32 @@ public class RegActivity extends AppCompatActivity {
         public void handleMessage(android.os.Message msg) {
             super.handleMessage(msg);
 
+            String msgStr = "";
+            String titleStr = "";
             dialogWaiting.cancel();
             int typeResponse = msg.arg1;
             switch (typeResponse)
             {
-
+                case Report.THE_USER_EXIST:
+                    titleStr = "Ошибка";
+                    msgStr = "Пользователь с данным логином уже существует, измените логин";
+                    break;
+                case Report.SUCCESSFUL_REG:
+                    titleStr = "Успешная регистрация";
+                    msgStr = "Благодарим за регистрацию в системе PROX!";
+                    break;
             }
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(RegActivity.this);
+            builder.setTitle(titleStr);
+            builder.setMessage(msgStr);
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+            });
+            builder.create().show();
         }
     };
 
@@ -59,6 +80,7 @@ public class RegActivity extends AppCompatActivity {
                     pass0.length() > 0 &&
                     pass1.length() > 0)
             {
+
                 if(pass0.compareTo(pass1) == 0)
                 {
                     Contact contact = new Contact();
@@ -67,8 +89,56 @@ public class RegActivity extends AppCompatActivity {
                     contact.password = pass0;
 
                     dialogWaiting.show();
+                    model.regRegistrationListener(new RegistrationListener() {
+
+                        @Override
+                        public void handlerEvent(int typeResponse) {
+                                Message message = new Message();
+                                message.arg1 = typeResponse;
+                                mHandler.sendMessage(message);
+                        }
+
+
+                    });
                     model.registration(contact);
                 }
+                else
+                {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(RegActivity.this);
+                    builder.setTitle("Ошибка ввода данных");
+                    builder.setMessage("Пароль и подтверждение пароля не совпадают. Повторите ввод пароля");
+                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+                    builder.create().show();
+                }
+
+            }
+            else
+            {
+                String msg = "";
+                if(loginStr.length() == 0)
+                    msg = "Вы забыли ввести логин";
+                else if(nameUserStr.length() == 0)
+                    msg = "Вы забыли ввести имя";
+                else if(pass0.length() == 0)
+                    msg = "Вы забыли ввести пароль";
+                else if(pass1.length() == 0)
+                    msg = "Введите подтверждение пароля";
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(RegActivity.this);
+                builder.setTitle("Ошибка ввода данных");
+                builder.setMessage(msg);
+                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                builder.create().show();
             }
         }
     };
@@ -87,14 +157,7 @@ public class RegActivity extends AppCompatActivity {
         regButton.setOnClickListener(regButtonListener);
 
         model = new Model();
-        model.regRegistrationListener(new RegistrationListener() {
-            @Override
-            public void handleEvent(int typeResponse) {
-                Message message = new Message();
-                message.arg1 = typeResponse;
-                mHandler.sendMessage(message);
-            }
-        });
+
 
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(RegActivity.this);
         dialogBuilder.setMessage("Ожидание ответа от сервера");
@@ -108,9 +171,10 @@ public class RegActivity extends AppCompatActivity {
 
                 model.regRegistrationListener(new RegistrationListener() {
                     @Override
-                    public void handleEvent(int typeResponse) {
+                    public void handlerEvent(int typeResponse) {
 
                     }
+
                 });
             }
         });

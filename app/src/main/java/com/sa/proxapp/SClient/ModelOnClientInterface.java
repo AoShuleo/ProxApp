@@ -1,17 +1,26 @@
+package com.sa.proxapp.SClient;
+
+
+import com.sa.proxapp.com.sa.ClientClass.Message;
+
 /**
- * Created by IHaveSomeCookies on 17.10.2016.
+ * Created by Android on 17.10.2016 in ProxApp project
+ * .
  */
-package com.sa.proxapp.com.sa.ClientClass;
-public interface ModelOnClientInterface {
-    void addContact(Contact contact);
+
+public interface ModelOnClientInterface
+{
+    void findContact(Contact contact);
     void getListContact();
     void getListDialog(Contact contact);
     void loginMe(String login,String password);
     void registration(Contact contact);
     void sendMessage(Message message);
+
+
+
     void regGetListContactListener(GetListContactListener listener);
     void regGetListDialogListener(GetListDialogListener listener);
     void regRegistrationListener(RegistrationListener listener);
-    void regAddContactListener(AddContactListener listener);
-    void regLoginMeListener(LoginMeListener listener);
+    void regLoginMeListener(LoginListener listener);
 }

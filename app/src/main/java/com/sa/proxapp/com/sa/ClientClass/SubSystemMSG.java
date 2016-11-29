@@ -62,6 +62,7 @@ public class SubSystemMSG implements SubSystemMSGInterface{
             Report answerReport = JSONCoder.decode(JSONstr);
             //int answerCode = answerReport.type;
             int responseCode = connection.getResponseCode();
+
             System.out.println("Код ошибки : " + responseCode);
             System.out.println("Строка : " + stringReport);
             System.out.println("Строка : " + JSONstr);

@@ -9,9 +9,10 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="2">
+        android:layout_weight="2"
+        android:layout_margin="@dimen/activity_horizontal_margin">
 
         <TextView
             android:text="Пусто"
@@ -30,18 +31,27 @@
             android:layout_width="match_parent"
             tools:layout_editor_absoluteY="51dp"
             tools:layout_editor_absoluteX="21dp"></TextView>
+
     </LinearLayout>
 
-    <Button
-        android:text="Button"
+    <Space
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_weight="1" />
+
+    <Button
         android:id="@+id/button2"
         tools:layout_editor_absoluteY="41dp"
         tools:layout_editor_absoluteX="275dp"
         android:layout_marginEnd="64dp"
         android:layout_marginRight="64dp"
         android:ems="0"
-        android:elevation="1dp" />
+        android:elevation="1dp"
+        style="@android:style/Widget.Material.Light.Button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Доп."
+        android:layout_weight="1"
+        android:layout_margin="@dimen/activity_horizontal_margin" />
 
 </LinearLayout>

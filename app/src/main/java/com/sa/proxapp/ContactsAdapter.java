@@ -47,6 +47,7 @@ public class ContactsAdapter extends ArrayAdapter<Contact> {
         TextView lab2 = (TextView) convertView.findViewById(R.id.label_el2);
         lab1.setText(cont.login);
         lab2.setText(cont.name);
+
         return convertView;
 
     }

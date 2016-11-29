@@ -30,6 +30,13 @@ public class ListDialogsFragment extends ListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
         contacts = new ArrayList<>();
         Contact testContact = new Contact();
         testContact.login = "1Login";
@@ -47,7 +54,5 @@ public class ListDialogsFragment extends ListFragment {
         ListAdapter adapter = new ContactsAdapter(getActivity(),
                 R.layout.list__element_contact,contacts);
         setListAdapter(adapter);
-
     }
-    
 }

@@ -6,6 +6,7 @@ import com.sa.proxapp.com.sa.ClientClass.simple.parser.JSONParser;
 
 
 public class JSONCoder {
+
     public static Object decode(String string, int t) // t = 1 - message, t = 2 - contact
     {
         JSONParser parser = new JSONParser();

@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
                 case Report.SUCCESSFUL_AUTH: //все ок
                     Intent intent = new Intent(MainActivity.this, AppActivity.class);
                     startActivity(intent);
+                    finish();
                     break;
             }
         }

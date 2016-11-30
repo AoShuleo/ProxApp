@@ -48,8 +48,9 @@ public class JSONCoder {
             String d = (String) jsonObj.get("data");
             if(report.type == Report.MESSAGE)
                 report.data = (Message) decode(d, report.type);
-            if(report.type == Report.CONTACT)
+            else if(report.type == Report.CONTACT)
                 report.data = (Contact) decode(d, report.type);
+            else report.data = (String) d;
         }
         catch(Exception e) {
             report.type = Report.JSON_DECODE_FAIL;

@@ -4,10 +4,18 @@
 package com.sa.proxapp.com.sa.ClientClass;
 
 
+import com.sa.proxapp.com.sa.ClientClass.simple.*;
+import com.sa.proxapp.com.sa.ClientClass.simple.parser.JSONParser;
+
+
+import java.util.ArrayList;
+import java.util.Iterator;
 
 //Внимание!!!
 //Стоит заглушка на успешную аутентификацию в методе loginMe
 
+
+import java.util.ArrayList;
 
 public class Model implements ModelOnClientInterface {
 
@@ -48,7 +56,50 @@ public class Model implements ModelOnClientInterface {
 
     @Override
     public void getListContact() {
+        final ReportListener reportListener = new ReportListener() {
+            @Override
+            public void handler(Report report) {
+                if(report.type != Report.SUCCESSFUL_FRIENDS)
+                    getListContactListener.handleEvent(null);
+                else {
+                    ArrayList<Contact> contactArrayList = new ArrayList<>();
+                    String strListArr = (String) report.data;
+                    try {
+                        JSONObject jsonObj;
+                        JSONParser parser = new JSONParser();
+                        Object obj = parser.parse(strListArr);
+                        jsonObj = (JSONObject) obj;
 
+                        JSONArray arr = (JSONArray) jsonObj.get("friends");// new JSONArray();
+                        Iterator iter = arr.iterator();
+                        String cont;
+                        Contact contact;
+                        while(iter.hasNext())
+                        {
+                            cont = (String) iter.next();
+                            contact = (Contact)JSONCoder.decode(cont, 2);
+                            contactArrayList.add(contact);
+                        }
+
+                        System.out.println(arr.toString());
+
+                    }
+                    catch (Exception e) {
+                        System.out.println("public void getListContact()" + e.toString());
+                    };
+                    getListContactListener.handleEvent(contactArrayList);
+                }
+            }
+        };
+        //Создание потока
+        Thread myThready = new Thread(new Runnable()
+        {
+            public void run() //Этот метод будет выполняться в побочном потоке
+            {
+                subSystemMSG.requestListContacts(reportListener);
+            }
+        });
+        myThready.start();	//Запуск потока
     }
 
     @Override
@@ -74,7 +125,8 @@ public class Model implements ModelOnClientInterface {
                 //subSystemMSG.loginMe(login,password,reportListener);
                 //заглушка
                 //При изменении не забыть убрать предупреждение
-                loginMeListener.handlerEvent(Report.SUCCESSFUL_AUTH);
+                subSystemMSG.loginMe("Tony", "123", reportListener);
+               // loginMeListener.handlerEvent(Report.SUCCESSFUL_AUTH);
 
             }
         });

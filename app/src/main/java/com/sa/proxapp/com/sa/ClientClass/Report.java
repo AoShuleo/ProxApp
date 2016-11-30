@@ -3,27 +3,30 @@
  */
 package com.sa.proxapp.com.sa.ClientClass;
 public class Report {
-    // Ошибки
+    static final public int SQL_EXCEPTION = 601; // Ошибка выполнения запроса
+    static final public int THE_USER_EXIST = 602; // Ошибка: Пользователь существует
+    static final public int THE_USER_IS_NOT_EXIST = 603; // Такого пользователя несуществует
+    static final public int COOKIE_FAIL = 604; // Ошибка: У пользователя нет куков или они не верны
+    static final public int JSON_DECODE_FAIL = 605; // Ошибка декодирования json
+    static final public int LOG_OR_PASS_IS_NOT_COR = 606; // Логин или пароль неверные
 
 
-    public static final int SQL_EXCEPTION = 601; // Ошибка выполнения запроса
-    public static final int THE_USER_EXIST = 602; // Ошибка: Пользователь существует
-    public static final int THE_USER_IS_NOT_EXIST = 603; // Такого пользователя несуществует
-    public static final int COOKIE_FAIL = 604; // Ошибка: У пользователя нет куков или они не верны
-    public static final int JSON_DECODE_FAIL = 605; // Ошибка декодирования json
-    public static final int SUCCESSFUL_SQL = 200;
+    static final public int SUCCESSFUL_SQL = 200;
 
 
     // TYPE
-    public static final int MESSAGE = 1; // Сообщение
-    public static final int CONTACT = 2; // Контакт
-    public static final int REGISTATION = 30; // Запрос регистрации
-    public static final int AUTHORISATION = 31; // Запрос авторизации
+    static final public int MESSAGE = 1; // Сообщение
+    static final public int CONTACT = 2; // добавить Контакт
+    static final public int GIVE_MY_FRIENDS = 32; // Запрос, дай мне список контактов
+    static final public int REGISTATION = 30; // Запрос регистрации
+    static final public int AUTHORISATION = 31; // Запрос авторизации
     // Ответ сервера
-    public static final int FIND_CONTACT = 15;
-    public static final int NOT_FIND_CONTACT = 16;
-    public static final int SUCCESSFUL_REG = 17; // Удачная регитрация
-    public static final int SUCCESSFUL_AUTH = 18; // Удачная авторизация
+    static final public int FIND_CONTACT = 15;
+    static final public int NOT_FIND_CONTACT = 16;
+    static final public int SUCCESSFUL_REG = 17; // Удачная региcтрация
+    static final public int SUCCESSFUL_AUTH = 18; // Удачная авторизация
+    static final public int SUCCESSFUL_SEND_MES = 19; // Удачная отправка сообщения
+    static final public int SUCCESSFUL_FRIENDS = 20; // Удачно отправленный список друзей
 
     public int type;
     public Object data;

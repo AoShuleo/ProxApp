@@ -1,8 +1,11 @@
 package com.sa.proxapp;
 
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,7 +22,6 @@ import com.sa.proxapp.com.sa.ClientClass.Contact;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Android on 21.11.2016 in ProxApp project
@@ -31,14 +33,14 @@ public class ContactsAdapter extends ArrayAdapter<Contact>{
     ArrayList<Contact> contactArrayList;
     Context context;
     int idRes;
-
-
+    private Activity activity;
 
     public ContactsAdapter(Context context, int resource, ArrayList<Contact> objects) {
         super(context, resource, objects);
         contactArrayList = objects;
         this.context = context;
         idRes = resource;
+
 
     }
 
@@ -67,7 +69,7 @@ public class ContactsAdapter extends ArrayAdapter<Contact>{
                 public void onClick(View v) {
                     //формирование экстра меню
                     PopupMenu popupMenu = new PopupMenu(getContext(), v);
-                    MenuInflater inflater = popupMenu.getMenuInflater();
+                    final MenuInflater inflater = popupMenu.getMenuInflater();
                     inflater.inflate(R.menu.extra_menu, popupMenu.getMenu());
 
                     //обработка нажатий пунктов меню
@@ -77,7 +79,28 @@ public class ContactsAdapter extends ArrayAdapter<Contact>{
                             Contact chCont = contactArrayList.get(position);
                             switch (item.getItemId()) {
                                 case R.id.item_extra_menu0:
-                                    Toast.makeText(getContext(), "Доп. контакта " + chCont.login, Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(getContext(), "Доп. контакта " + chCont.login, Toast.LENGTH_SHORT).show();
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+                                    LayoutInflater inflater = activity.getLayoutInflater();
+                                    View view = inflater.inflate(R.layout.info_contact_dialog,null);
+                                    TextView iLogin = (TextView)view.findViewById(R.id.info_login);
+                                    TextView iName = (TextView)view.findViewById(R.id.info_name);
+
+                                    iLogin.setText(chCont.login);
+                                    iName.setText(chCont.name);
+
+                                    builder.setView(view);
+                                    builder.setTitle("Информация о контакте");
+                                    builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+
+                                        }
+                                    });
+                                    AlertDialog alertDialog = builder.create();
+                                    alertDialog.show();
+
                                     return true;
                                 case R.id.item_extra_menu1:
                                     Toast.makeText(getContext(), "Удаление контакта " + chCont.login, Toast.LENGTH_SHORT).show();
@@ -92,5 +115,9 @@ public class ContactsAdapter extends ArrayAdapter<Contact>{
      //   }
         return convertView;
 
+    }
+
+    public void setActivity(Activity activity) {
+        this.activity = activity;
     }
 }

@@ -62,7 +62,7 @@ public class ListDialogsFragment extends ListFragment  {
 
         contacts = new ArrayList<>();
         adapter = new ContactsAdapter(getActivity(),R.layout.list__element_contact,contacts);
-
+        ((ContactsAdapter) adapter).setActivity(getActivity());
     }
 
 

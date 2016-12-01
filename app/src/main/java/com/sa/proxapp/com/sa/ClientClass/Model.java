@@ -101,7 +101,7 @@ public class Model implements ModelOnClientInterface {
                 //Внимание, заглушка на успешное получение списка контактов
                 ArrayList<Contact> contactArrayList = new ArrayList<>();
                 Contact contact;
-                for(int i = 0; i < 0; ++i)
+                for(int i = 0; i < 20; ++i)
                 {
                     contact = new Contact();
                     contact.name =  Integer.toString(i);

@@ -8,11 +8,13 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 
 import com.sa.proxapp.com.sa.ClientClass.Contact;
 import com.sa.proxapp.com.sa.ClientClass.GetListContactListener;
@@ -26,7 +28,7 @@ import java.util.ArrayList;
  * .
  */
 
-public class ListDialogsFragment extends ListFragment {
+public class ListDialogsFragment extends ListFragment  {
 
     Model model = new Model();
     ArrayList<Contact> contacts;
@@ -48,9 +50,19 @@ public class ListDialogsFragment extends ListFragment {
 
         }
     };
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+      return inflater.inflate(R.layout.fragment_list_dialog,null);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        contacts = new ArrayList<>();
+        adapter = new ContactsAdapter(getActivity(),R.layout.list__element_contact,contacts);
+
     }
 
 
@@ -64,12 +76,10 @@ public class ListDialogsFragment extends ListFragment {
     }
 
     @Override
-    public void onStart() {
+    public void onStart() { //вызывается каждый раз при появлении фрагмента (активности?)
         super.onStart();
 
-        contacts = new ArrayList<>();
-        adapter = new ContactsAdapter(getActivity(),
-                R.layout.list__element_contact,contacts);
+
 
         model.regGetListContactListener(new GetListContactListener() {
             @Override
@@ -79,24 +89,8 @@ public class ListDialogsFragment extends ListFragment {
                 mHandler.sendMessage(message);
             }
         });
-        System.out.println("List start////////////////////");
+        //System.out.println("List start////////////////////");
         model.getListContact();
-
-        /*Contact testContact = new Contact();
-        testContact.login = "1Login";
-        testContact.name = "1Name";
-        contacts.add(testContact);
-        testContact = new Contact();
-        testContact.login = "2Login";
-        testContact.name = "2Name";
-        contacts.add(testContact);
-        testContact = new Contact();
-        testContact.login = "3Login";
-        testContact.name = "3Name";
-        contacts.add(testContact);*/
-
-
-
     }
 
 }

@@ -13,7 +13,7 @@ import java.util.Iterator;
 
 //Внимание!!!
 //Стоит заглушка на успешную аутентификацию в методе loginMe
-
+//Внимание, заглушка на успешное получение списка контактов в методе getListContact
 
 import java.util.ArrayList;
 
@@ -96,7 +96,20 @@ public class Model implements ModelOnClientInterface {
         {
             public void run() //Этот метод будет выполняться в побочном потоке
             {
-                subSystemMSG.requestListContacts(reportListener);
+                //subSystemMSG.requestListContacts(reportListener);
+
+                //Внимание, заглушка на успешное получение списка контактов
+                ArrayList<Contact> contactArrayList = new ArrayList<>();
+                Contact contact;
+                for(int i = 0; i < 0; ++i)
+                {
+                    contact = new Contact();
+                    contact.name =  Integer.toString(i);
+                    contact.login = "L"+contact.name;
+                    contactArrayList.add(contact);
+                }
+                getListContactListener.handleEvent(contactArrayList);
+
             }
         });
         myThready.start();	//Запуск потока
@@ -125,8 +138,8 @@ public class Model implements ModelOnClientInterface {
                 //subSystemMSG.loginMe(login,password,reportListener);
                 //заглушка
                 //При изменении не забыть убрать предупреждение
-                subSystemMSG.loginMe("Tony", "123", reportListener);
-               // loginMeListener.handlerEvent(Report.SUCCESSFUL_AUTH);
+                //subSystemMSG.loginMe("Tony", "123", reportListener);
+                loginMeListener.handlerEvent(Report.SUCCESSFUL_AUTH);
 
             }
         });

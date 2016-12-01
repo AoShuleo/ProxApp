@@ -40,7 +40,7 @@
         android:layout_weight="1" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/extar_button_on_contact"
         tools:layout_editor_absoluteY="41dp"
         tools:layout_editor_absoluteX="275dp"
         android:layout_marginEnd="64dp"

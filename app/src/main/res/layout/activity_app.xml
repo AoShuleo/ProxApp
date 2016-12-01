@@ -25,7 +25,7 @@
             android:id="@+id/fragment"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
-            tools:layout="@layout/list__element_contact" />
+            tools:layout="@layout/fragment_list_dialog" />
 
         <!--   <android.support.design.widget.FloatingActionButton
            android:id="@+id/fab"

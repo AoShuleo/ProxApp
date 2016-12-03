@@ -28,7 +28,6 @@ public class RegActivity extends AppCompatActivity {
     Model model;
 
     AlertDialog dialogWaiting;
-    AlertDialog dialogError;
 
 
     android.os.Handler mHandler = new android.os.Handler(Looper.getMainLooper())

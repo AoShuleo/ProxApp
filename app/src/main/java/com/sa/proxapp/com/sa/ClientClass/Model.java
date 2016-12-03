@@ -104,6 +104,11 @@ public class Model implements ModelOnClientInterface {
                 //subSystemMSG.requestListContacts(reportListener);
 
                 //Внимание, заглушка на успешное получение списка контактов
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 ArrayList<Contact> contactArrayList = new ArrayList<>();
                 Contact contact;
                 for(int i = 0; i < 20; ++i)
@@ -220,6 +225,11 @@ public class Model implements ModelOnClientInterface {
                 //subSystemMSG.delContact(contact,reportListener);
                 //заглушка
                 //При изменении не забыть убрать предупреждение о заглушке наверху
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 delContactListener.handlerEvent(Report.SUCCESSFUL_DEL);
             }
         });

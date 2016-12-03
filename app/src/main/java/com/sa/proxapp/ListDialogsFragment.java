@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.sa.proxapp.com.sa.ClientClass.Contact;
 import com.sa.proxapp.com.sa.ClientClass.GetListContactListener;
 import com.sa.proxapp.com.sa.ClientClass.Model;
+import com.sa.proxapp.com.sa.ClientClass.RegistrationListener;
 import com.sa.proxapp.com.sa.ClientClass.Report;
 import com.sa.proxapp.com.sa.ClientClass.UniversalListener;
 import com.sa.proxapp.com.sa.ClientClass.UniversalListenerWithObject;
@@ -37,6 +38,8 @@ public class ListDialogsFragment extends ListFragment  {
     ArrayList<Contact> contacts;
     ListAdapter adapter;
     private Contact contactForDelete;
+
+    AlertDialog dialogWaiting;
 
     android.os.Handler mHandler = new android.os.Handler(Looper.getMainLooper())
     {
@@ -61,6 +64,7 @@ public class ListDialogsFragment extends ListFragment  {
                     }
                     break;
                 case 1:
+                    dialogWaiting.hide();
                     if(msg.arg2 == Report.SUCCESSFUL_DEL)
                     {
                         Toast.makeText(getActivity(),"Контакт удален", Toast.LENGTH_SHORT).show();
@@ -96,6 +100,7 @@ public class ListDialogsFragment extends ListFragment  {
             @Override
             public void handlerEvent(int typeResponse, Object object) {
                 contactForDelete = (Contact) object;
+                dialogWaiting.show();
                 model.deleteContact(contactForDelete);
             }
         });
@@ -119,6 +124,19 @@ public class ListDialogsFragment extends ListFragment  {
                 mHandler.sendMessage(message);
             }
         });
+
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+        dialogBuilder.setMessage("Ожидание ответа от сервера");
+        dialogBuilder.setTitle("Подождите немного, пожалуйста");
+        dialogBuilder.setCancelable(false);
+        dialogBuilder.setView(R.layout.dialog_waitig);
+
+        dialogBuilder.setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {}
+        });
+
+        dialogWaiting = dialogBuilder.create();
     }
 
 

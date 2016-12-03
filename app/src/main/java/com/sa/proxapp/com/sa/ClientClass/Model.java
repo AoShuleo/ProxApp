@@ -14,6 +14,7 @@ import java.util.Iterator;
 //Внимание!!!
 //Стоит заглушка на успешную аутентификацию в методе loginMe
 //Внимание, заглушка на успешное получение списка контактов в методе getListContact
+//Стоит заглушка на успешное удаление контакта
 
 import java.util.ArrayList;
 
@@ -25,6 +26,11 @@ public class Model implements ModelOnClientInterface {
     GetListContactListener getListContactListener;
     AddContactListener addContactListener;
     SubSystemMSG subSystemMSG;
+
+    private UniversalListener delContactListener;
+    private GetListContactListener findContactsListener;
+
+
     public Model (){
         subSystemMSG = new SubSystemMSG();
     }
@@ -34,13 +40,12 @@ public class Model implements ModelOnClientInterface {
         final ReportListener reportListener = new ReportListener() {
             @Override
             public void handler(Report report) {
-                if (report.type == Report.NOT_FIND_CONTACT){ //если не нашел контакт
-                    addContactListener.handlerEvent(null);
-                }
-                if (report.type == Report.FIND_CONTACT){ //если нашел контакт
-                    Contact contact = (Contact) report.data;
+                if (report.type == Report.SUCCESSFUL_ADD){ //если нашел контакт
+                    Contact contact = (Contact) JSONCoder.decode((String) report.data,2);
                     addContactListener.handlerEvent(contact);
                 }
+                else
+                    addContactListener.handlerEvent(null);
             }
         };
         //Создание потока
@@ -137,7 +142,7 @@ public class Model implements ModelOnClientInterface {
             {
                 //subSystemMSG.loginMe(login,password,reportListener);
                 //заглушка
-                //При изменении не забыть убрать предупреждение
+                //При изменении не забыть убрать предупреждение о заглушке наверху
                 //subSystemMSG.loginMe("Tony", "123", reportListener);
                 loginMeListener.handlerEvent(Report.SUCCESSFUL_AUTH);
 
@@ -192,4 +197,87 @@ public class Model implements ModelOnClientInterface {
 
     @Override
     public void regLoginMeListener(LoginMeListener listener) {loginMeListener = listener; }
+
+    @Override
+    public void regFindContactsListener(GetListContactListener listener) {
+        findContactsListener = listener;
+    }
+
+    //add 02.12
+    @Override
+    public void deleteContact(final Contact contact) {
+        final ReportListener reportListener = new ReportListener() {
+            @Override
+            public void handler(Report report) {
+                delContactListener.handlerEvent(report.type);
+            }
+        };
+        //Создание потока
+        Thread myThready = new Thread(new Runnable()
+        {
+            public void run() //Этот метод будет выполняться в побочном потоке
+            {
+                //subSystemMSG.delContact(contact,reportListener);
+                //заглушка
+                //При изменении не забыть убрать предупреждение о заглушке наверху
+                delContactListener.handlerEvent(Report.SUCCESSFUL_DEL);
+            }
+        });
+        myThready.start();	//Запуск потока
+    }
+
+    @Override
+    public void findContacts(final Contact contact) {
+        final ReportListener reportListener = new ReportListener() {
+            @Override
+            public void handler(Report report) {
+                if(report.data != null)
+                {
+                    ArrayList<Contact> contactArrayList = new ArrayList<>();
+                    String strListArr = (String) report.data;
+                    try {
+                        JSONObject jsonObj;
+                        JSONParser parser = new JSONParser();
+                        Object obj = parser.parse(strListArr);
+                        jsonObj = (JSONObject) obj;
+
+                        JSONArray arr = (JSONArray) jsonObj.get("findList");// new JSONArray();
+                        Iterator iter = arr.iterator();
+                        String cont;
+                        Contact contact;
+                        while(iter.hasNext())
+                        {
+                            cont = (String) iter.next();
+                            contact = (Contact)JSONCoder.decode(cont, 2);
+                            contactArrayList.add(contact);
+                        }
+
+                        System.out.println(arr.toString());
+
+                    }
+                    catch (Exception e) {
+                        System.out.println("public void getListContact()" + e.toString());
+                    };
+                    findContactsListener.handleEvent(contactArrayList);
+                }
+                else
+                    findContactsListener.handleEvent(null);
+            }
+        };
+        //Создание потока
+        Thread myThready = new Thread(new Runnable()
+        {
+            public void run() //Этот метод будет выполняться в побочном потоке
+            {
+                subSystemMSG.findContact(contact, reportListener);
+            }
+        });
+        myThready.start();	//Запуск потока
+    }
+
+    //add 02.12
+    @Override
+    public void regDelContactListener(UniversalListener delContactListener) {
+        this.delContactListener = delContactListener;
+    }
 }

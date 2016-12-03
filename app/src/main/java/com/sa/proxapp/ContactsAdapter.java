@@ -18,6 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sa.proxapp.com.sa.ClientClass.Contact;
+import com.sa.proxapp.com.sa.ClientClass.Report;
+import com.sa.proxapp.com.sa.ClientClass.UniversalListenerWithObject;
 
 import org.w3c.dom.Text;
 
@@ -35,13 +37,16 @@ public class ContactsAdapter extends ArrayAdapter<Contact>{
     int idRes;
     private Activity activity;
 
+    /**
+     * внешний листенер для обработки удаления контакта в активности
+     */
+    private UniversalListenerWithObject delContact;
+
     public ContactsAdapter(Context context, int resource, ArrayList<Contact> objects) {
         super(context, resource, objects);
         contactArrayList = objects;
         this.context = context;
         idRes = resource;
-
-
     }
 
     @NonNull
@@ -76,9 +81,9 @@ public class ContactsAdapter extends ArrayAdapter<Contact>{
                     popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
-                            Contact chCont = contactArrayList.get(position);
+                            final Contact chCont = contactArrayList.get(position);
                             switch (item.getItemId()) {
-                                case R.id.item_extra_menu0:
+                                case R.id.item_extra_menu0: //пункт меню - доп. информация
                                     //Toast.makeText(getContext(), "Доп. контакта " + chCont.login, Toast.LENGTH_SHORT).show();
                                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
@@ -102,8 +107,23 @@ public class ContactsAdapter extends ArrayAdapter<Contact>{
                                     alertDialog.show();
 
                                     return true;
-                                case R.id.item_extra_menu1:
-                                    Toast.makeText(getContext(), "Удаление контакта " + chCont.login, Toast.LENGTH_SHORT).show();
+                                case R.id.item_extra_menu1: //пункт меню - удаление контакта
+                                    AlertDialog.Builder builderDel = new AlertDialog.Builder(getContext());
+                                    builderDel.setTitle("Подтвердите удаление контакта");
+                                    builderDel.setMessage("Контакт " + chCont.login + " будет удален из вашего списка.\n" +
+                                            "Выполнить это действие?");
+                                    builderDel.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            delContact.handlerEvent(Report.DEL_FRIEND,chCont);
+                                        }
+                                    });
+                                    builderDel.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {}
+                                    });
+                                    builderDel.setCancelable(true);
+                                    builderDel.create().show();
                                     return true;
                             }
                             return false;
@@ -119,5 +139,9 @@ public class ContactsAdapter extends ArrayAdapter<Contact>{
 
     public void setActivity(Activity activity) {
         this.activity = activity;
+    }
+
+    public void setDelContact(UniversalListenerWithObject delContact) {
+        this.delContact = delContact;
     }
 }

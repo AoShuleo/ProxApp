@@ -11,7 +11,7 @@
         android:orientation="vertical"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="6"
+        android:layout_weight="2"
         android:layout_margin="@dimen/activity_horizontal_margin">
 
         <RelativeLayout
@@ -70,43 +70,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true" />
         </RelativeLayout>
-        <!--
-        <TextView
-            android:text="Пусто"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/label_el2"
-            tools:layout_editor_absoluteY="68dp"
-            tools:layout_editor_absoluteX="21dp"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:textColor="@android:color/black"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/label_el"
-            android:layout_height="wrap_content"
-            android:text="Пусто"
-            android:layout_width="match_parent"
-            tools:layout_editor_absoluteY="51dp"
-            tools:layout_editor_absoluteX="21dp"
-            android:elevation="1dp"
-            android:gravity="right"></TextView> -->
 
     </LinearLayout>
-
-    <FrameLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_marginTop="@dimen/activity_vertical_margin">
-
-        <Button
-            android:id="@+id/extar_button_on_contact"
-            android:layout_width="@dimen/extra_but"
-            android:layout_height="@dimen/extra_but"
-            android:layout_gravity="right"
-            android:layout_margin="@dimen/activity_horizontal_margin"
-            android:background="@android:drawable/ic_menu_more" />
-    </FrameLayout>
 
 </LinearLayout>

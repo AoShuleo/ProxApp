@@ -9,7 +9,8 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/fr_cont">
 
   <!--      <android.support.v7.widget.Toolbar
             android:id="@+id/my_toolbar"
@@ -20,12 +21,12 @@
             layout_width="wrap_content"
             layout_height="wrap_content" />  -->
 
-        <fragment
-            android:name="com.sa.proxapp.ListDialogsFragment"
-            android:id="@+id/fragment"
-            android:layout_height="match_parent"
+        <FrameLayout
             android:layout_width="match_parent"
-            tools:layout="@layout/fragment_list_dialog" />
+            android:layout_height="match_parent"
+            android:id="@+id/container">
+
+        </FrameLayout>
 
         <!--   <android.support.design.widget.FloatingActionButton
            android:id="@+id/fab"

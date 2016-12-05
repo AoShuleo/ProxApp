@@ -15,10 +15,13 @@ import java.util.Iterator;
 //Стоит заглушка на успешную аутентификацию в методе loginMe
 //Внимание, заглушка на успешное получение списка контактов в методе getListContact
 //Стоит заглушка на успешное удаление контакта
+//Внимание, заглушка на успешный поиск контактов
 
 import java.util.ArrayList;
 
 public class Model implements ModelOnClientInterface {
+
+    final boolean TESTSTAT = true;
 
     RegistrationListener registrationListener;
     LoginMeListener loginMeListener;
@@ -101,24 +104,27 @@ public class Model implements ModelOnClientInterface {
         {
             public void run() //Этот метод будет выполняться в побочном потоке
             {
-                //subSystemMSG.requestListContacts(reportListener);
 
-                //Внимание, заглушка на успешное получение списка контактов
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                if(TESTSTAT == false)
+                    subSystemMSG.requestListContacts(reportListener);
+                else {
+
+                    //Внимание, заглушка на успешное получение списка контактов
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    ArrayList<Contact> contactArrayList = new ArrayList<>();
+                    Contact contact;
+                    for (int i = 0; i < 20; ++i) {
+                        contact = new Contact();
+                        contact.name = Integer.toString(i);
+                        contact.login = "L" + contact.name;
+                        contactArrayList.add(contact);
+                    }
+                    getListContactListener.handleEvent(contactArrayList);
                 }
-                ArrayList<Contact> contactArrayList = new ArrayList<>();
-                Contact contact;
-                for(int i = 0; i < 20; ++i)
-                {
-                    contact = new Contact();
-                    contact.name =  Integer.toString(i);
-                    contact.login = "L"+contact.name;
-                    contactArrayList.add(contact);
-                }
-                getListContactListener.handleEvent(contactArrayList);
 
             }
         });
@@ -145,11 +151,15 @@ public class Model implements ModelOnClientInterface {
         {
             public void run() //Этот метод будет выполняться в побочном потоке
             {
-                //subSystemMSG.loginMe(login,password,reportListener);
-                //заглушка
-                //При изменении не забыть убрать предупреждение о заглушке наверху
-                //subSystemMSG.loginMe("Tony", "123", reportListener);
-                loginMeListener.handlerEvent(Report.SUCCESSFUL_AUTH);
+                /*if(TESTSTAT == false) {
+                    subSystemMSG.loginMe(login, password, reportListener);
+                }
+                else*/ {
+                    //заглушка
+                    //При изменении не забыть убрать предупреждение о заглушке наверху
+                    //subSystemMSG.loginMe("Tony", "123", reportListener);
+                    loginMeListener.handlerEvent(Report.SUCCESSFUL_AUTH);
+                }
 
             }
         });
@@ -222,15 +232,18 @@ public class Model implements ModelOnClientInterface {
         {
             public void run() //Этот метод будет выполняться в побочном потоке
             {
-                //subSystemMSG.delContact(contact,reportListener);
-                //заглушка
-                //При изменении не забыть убрать предупреждение о заглушке наверху
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                if(TESTSTAT == false)
+                    subSystemMSG.delContact(contact,reportListener);
+                else {
+                    //заглушка
+                    //При изменении не забыть убрать предупреждение о заглушке наверху
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    delContactListener.handlerEvent(Report.SUCCESSFUL_DEL);
                 }
-                delContactListener.handlerEvent(Report.SUCCESSFUL_DEL);
             }
         });
         myThready.start();	//Запуск потока
@@ -279,7 +292,27 @@ public class Model implements ModelOnClientInterface {
         {
             public void run() //Этот метод будет выполняться в побочном потоке
             {
-                subSystemMSG.findContact(contact, reportListener);
+                if(TESTSTAT == false)
+                    subSystemMSG.findContact(contact, reportListener);
+                else
+                {
+                    //Внимание, заглушка на успешное получение списка контактов
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    ArrayList<Contact> contactArrayList = new ArrayList<>();
+                    Contact contact;
+                    for(int i = 0; i < 20; ++i)
+                    {
+                        contact = new Contact();
+                        contact.name =  Integer.toString(i);
+                        contact.login = "F"+contact.name;
+                        contactArrayList.add(contact);
+                    }
+                    findContactsListener.handleEvent(contactArrayList);
+                }
             }
         });
         myThready.start();	//Запуск потока

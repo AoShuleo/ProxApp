@@ -12,6 +12,7 @@ import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -32,9 +33,9 @@ import java.util.ArrayList;
  * .
  */
 
-public class ListDialogsFragment extends ListFragment  {
+public class ListContactsFragment extends ListFragment  {
 
-    Model model = new Model();
+    Model model;
     ArrayList<Contact> contacts;
     ListAdapter adapter;
     private Contact contactForDelete;
@@ -84,7 +85,8 @@ public class ListDialogsFragment extends ListFragment  {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-      return inflater.inflate(R.layout.fragment_list_dialog,null);
+        View view = inflater.inflate(R.layout.fragment_list_dialog,null);
+        return view;
     }
 
     @Override
@@ -104,6 +106,8 @@ public class ListDialogsFragment extends ListFragment  {
                 model.deleteContact(contactForDelete);
             }
         });
+
+
 
         model.regGetListContactListener(new GetListContactListener() {
             @Override
@@ -152,7 +156,13 @@ public class ListDialogsFragment extends ListFragment  {
         super.onStart();
 
         //System.out.println("List start////////////////////");
+        getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getActivity(),"Нажат элемент листа", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         model.getListContact();
     }
-
 }

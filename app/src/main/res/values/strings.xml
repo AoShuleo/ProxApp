@@ -23,4 +23,5 @@
         чтобы добавить кого-нибудь в список</string>
     <string name="user_login">Логин</string>
     <string name="user_name">Имя</string>
+    <string name="empty_list_find_contacts">Список поиска пуст</string>
 </resources>

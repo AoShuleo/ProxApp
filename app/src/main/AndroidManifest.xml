@@ -21,7 +21,8 @@
         <activity
             android:name=".AppActivity"
             android:label="@string/title_activity_app"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateHidden"></activity>
     </application>
 
 </manifest>

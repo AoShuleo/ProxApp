@@ -106,7 +106,9 @@
             android:layout_height="@dimen/extra_but"
             android:layout_gravity="right"
             android:layout_margin="@dimen/activity_horizontal_margin"
-            android:background="@android:drawable/ic_menu_more" />
+            android:background="@android:drawable/ic_menu_more"
+            android:focusable="false"
+            android:focusableInTouchMode="false"/>
     </FrameLayout>
 
 </LinearLayout>

@@ -86,6 +86,9 @@ public class ListFindContactsFragment extends Fragment {
         findNameTextView = (TextView) view.findViewById(R.id.editText5);
         listView = (ListView) view.findViewById(R.id.list_contacts);
 
+        findLoginTextView.setText("");
+        findNameTextView.setText("");
+
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

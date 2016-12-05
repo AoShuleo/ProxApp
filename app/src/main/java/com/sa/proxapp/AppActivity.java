@@ -9,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.sa.proxapp.com.sa.ClientClass.Contact;
+
 public class AppActivity extends AppCompatActivity
 {
 
@@ -16,16 +18,34 @@ public class AppActivity extends AppCompatActivity
     FloatingActionButton fab;
     ListContactsFragment listContactsFragment;
     ListFindContactsFragment findContactsFragment;
+    DialogFragment dialogFragment;
+
+    ListContactsFragment.OnClickContact onClickContact = new ListContactsFragment.OnClickContact() {
+        @Override
+        public void handlerClick(Contact contact) {
+            fab.hide();
+            dialogFragment.curContact = contact;
+
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.replace(R.id.container, dialogFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app);
 
-
         fragmentManager = getFragmentManager();
+
         findContactsFragment = new ListFindContactsFragment();
         listContactsFragment = new ListContactsFragment();
+        dialogFragment = new DialogFragment();
+
+        listContactsFragment.clickContact = onClickContact;
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.add(R.id.container, listContactsFragment);

@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.sa.proxapp.com.sa.ClientClass.Contact;
+import com.sa.proxapp.com.sa.ClientClass.Model;
 
 public class AppActivity extends AppCompatActivity
 {
@@ -44,6 +45,7 @@ public class AppActivity extends AppCompatActivity
         findContactsFragment = new ListFindContactsFragment();
         listContactsFragment = new ListContactsFragment();
         dialogFragment = new DialogFragment();
+
 
         listContactsFragment.clickContact = onClickContact;
 

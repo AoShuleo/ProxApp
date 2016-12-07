@@ -46,6 +46,32 @@ public class ListFindContactsFragment extends Fragment {
     TextView findNameTextView;
     ListView listView;
 
+    public ListFindContactsFragment() {
+        super();
+        model = new Model();
+
+        model.regFindContactsListener(new GetListContactListener() {
+            @Override
+            public void handleEvent(ArrayList<Contact> contactArrayList) {
+                Message message = new Message();
+                message.arg1 = 0;
+                message.obj = contactArrayList;
+                mHandler.sendMessage(message);
+            }
+        });
+
+        model.regAddContactListener(new AddContactListener() {
+            @Override
+            public void handlerEvent(Contact contact) {
+                Message message = new Message();
+                message.arg1 = 1;
+                message.obj = contact;
+                if(contact != null)
+                    mHandler.sendMessage(message);
+            }
+        });
+    }
+
     android.os.Handler mHandler = new android.os.Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(android.os.Message msg) {
@@ -152,34 +178,9 @@ public class ListFindContactsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-
-        model = new Model();
         contacts = new ArrayList<>();
         adapter = new FindContactsAdapter(getActivity(),R.layout.list_element_find_contact,contacts);
         ((FindContactsAdapter) adapter).setActivity(getActivity());
-
-
-        model.regFindContactsListener(new GetListContactListener() {
-            @Override
-            public void handleEvent(ArrayList<Contact> contactArrayList) {
-                Message message = new Message();
-                message.arg1 = 0;
-                message.obj = contactArrayList;
-                mHandler.sendMessage(message);
-            }
-        });
-
-        model.regAddContactListener(new AddContactListener() {
-            @Override
-            public void handlerEvent(Contact contact) {
-                Message message = new Message();
-                message.arg1 = 1;
-                message.obj = contact;
-                if(contact != null)
-                    mHandler.sendMessage(message);
-            }
-        });
     }
 
 

@@ -29,7 +29,9 @@ import java.util.ArrayList;
 
 public class ListContactsFragment extends ListFragment  {
     Model model;
+
     ArrayList<Contact> contacts;
+
     ListAdapter adapter;
     private Contact contactForDelete;
 
@@ -41,10 +43,11 @@ public class ListContactsFragment extends ListFragment  {
     }
     OnClickContact clickContact;
 
+
     public ListContactsFragment() {
         super();
-        model = new Model();
 
+        model = new Model();
 
         model.regGetListContactListener(new GetListContactListener() {
             @Override

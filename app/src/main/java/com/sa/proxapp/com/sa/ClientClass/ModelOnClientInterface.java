@@ -9,12 +9,13 @@ public interface ModelOnClientInterface {
     void deleteContact(Contact contact);//done
     void findContacts(Contact contact);//done
 
-    void getListDialog(Contact contact);
+    void getListDialog(Contact contact);//done
+    void getUpdateDialog(Contact contact, GetListDialogListener listener);
 
     void loginMe(String login,String password);//done
     void registration(Contact contact);//done
 
-    void sendMessage(Message message);
+    void sendMessage(Message message);//done
 
     void regGetListContactListener(GetListContactListener listener);//done
     void regGetListDialogListener(GetListDialogListener listener);//done
@@ -23,4 +24,5 @@ public interface ModelOnClientInterface {
     void regDelContactListener(UniversalListener delContactListener);//done
     void regLoginMeListener(LoginMeListener listener);//done
     void regFindContactsListener(GetListContactListener listener);//done
+    void regSendingCallBack(UniversalListener listener);//done
 }

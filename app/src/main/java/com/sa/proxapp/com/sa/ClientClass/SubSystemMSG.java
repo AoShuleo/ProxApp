@@ -78,6 +78,31 @@ public class SubSystemMSG implements SubSystemMSGInterface{
         return JSONstr;
     }
 
+    //add 06.12
+    @Override
+    public void requestDialog(Contact contact, ReportListener reportListener) {
+        Report report = new Report();
+        report.data = contact;
+        report.type = Report.GIVE_MY_DIALOG; //запрос на получение диалога
+
+        String answerStr = aggregateConnectionWithSession(report);
+
+        Report answerReport = JSONCoder.decode(answerStr);
+        reportListener.handler(answerReport);
+    }
+
+    @Override
+    public void requestUpdateDialog(Contact contact, ReportListener reportListener) {
+        Report report = new Report();
+        report.data = contact;
+        report.type = Report.UPDATE_MESSAGE; //запрос на получение диалога
+
+        String answerStr = aggregateConnectionWithSession(report);
+
+        Report answerReport = JSONCoder.decode(answerStr);
+        reportListener.handler(answerReport);
+    }
+
     @Override
     public void requestListContacts(ReportListener reportListener) {
         Report report = new Report();
@@ -208,13 +233,15 @@ public class SubSystemMSG implements SubSystemMSGInterface{
     }
 
     @Override
-    public void registrListener(ReportListener reportListener) {
-
-    }
-
-    @Override
     public void sendMessage(Message message, ReportListener reportListener) {
+        Report report = new Report();
+        report.data = message;
+        report.type = Report.MESSAGE;
 
+        String answerStr = aggregateConnectionWithSession(report);
+
+        Report answerReport = JSONCoder.decode(answerStr);
+        reportListener.handler(answerReport);
     }
 }
 

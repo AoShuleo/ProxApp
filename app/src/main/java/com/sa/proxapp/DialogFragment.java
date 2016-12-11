@@ -41,6 +41,34 @@ public class DialogFragment extends Fragment {
 
     Message sendingMessage;
 
+    Thread updateThread;
+    Runnable updateThreadInt = new Runnable() {
+        @Override
+        public void run() {
+            System.out.println("START");
+                try {
+                    while (!Thread.interrupted()) {
+                        Thread.sleep(1000);
+                        System.out.println("Update");
+                        model.getUpdateDialog(curContact, new GetListDialogListener() {
+                            @Override
+                            public void handlerEvent(ArrayList<Message> messageArrayList) {
+                                if(messageArrayList != null && messageArrayList.size() > 0) {
+                                    android.os.Message message = new android.os.Message();
+                                    message.arg1 = 1;
+                                    message.arg2 = 1;
+                                    message.obj = messageArrayList;
+                                    mHandler.sendMessage(message);
+                                }
+                            }
+                        });
+                    }
+                } catch (InterruptedException e) {
+                    System.out.println("STOP");
+                }
+            }
+    };
+
     View.OnClickListener buttonSendListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -58,6 +86,18 @@ public class DialogFragment extends Fragment {
 
                 sendingMessage = message;
                 model.sendMessage(message);
+
+                messageTextView.setText("");
+                sendingMessage.contact.login = "I am";
+                messageArrayList.add(sendingMessage);
+                adapter.notifyDataSetChanged();
+                //dialogListView.setSelection(adapter.getCount());
+                dialogListView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialogListView.setSelection(adapter.getCount());
+                    }
+                }, 50);
             }
         }
     };
@@ -75,6 +115,8 @@ public class DialogFragment extends Fragment {
                 message.arg1 = 0;
                 message.arg2 = typeResponse;
                 mHandler.sendMessage(message);
+
+
             }
         });
 
@@ -83,6 +125,7 @@ public class DialogFragment extends Fragment {
             public void handlerEvent(ArrayList<Message> messageArrayList) {
                 android.os.Message message = new android.os.Message();
                 message.arg1 = 1;
+                message.arg2 = 0;
                 message.obj = messageArrayList;
                 mHandler.sendMessage(message);
             }
@@ -100,19 +143,27 @@ public class DialogFragment extends Fragment {
                         Toast.makeText(getActivity(),"Сообщение не отправлено", Toast.LENGTH_SHORT).show();
                     else {
 
-                        messageTextView.setText("");
-                        sendingMessage.contact.login = "I am";
-                        messageArrayList.add(sendingMessage);
-                        adapter.notifyDataSetChanged();
+
                     }
                     break;
                 case 1:
-                    messageArrayList.clear();
+                    if(msg.arg2 == 0) {
+                        messageArrayList.clear();
+                        updateThread = new Thread(updateThreadInt);
+                        updateThread.start();
+                    }
                     ArrayList<Message> mes = (ArrayList) msg.obj;
                     for (Message el : mes) {
                         messageArrayList.add(el);
                     }
-                    dialogListView.setAdapter(adapter);
+                   //dialogListView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                    dialogListView.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            dialogListView.setSelection(adapter.getCount());
+                        }
+                    }, 50);
                     break;
             }
         }
@@ -141,12 +192,25 @@ public class DialogFragment extends Fragment {
         messageArrayList = new ArrayList<>();
         adapter = new DialogAdapter(getActivity(),R.layout.list_element_message,messageArrayList);
         ((DialogAdapter)adapter).setActivity(getActivity());
+        ((DialogAdapter) adapter).toContact = curContact;
+
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-
+    public void onResume() {
+        super.onResume();
         model.getListDialog(curContact);
+
     }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(updateThread != null)
+            updateThread.interrupt();
+
+    }
+
+
 }

@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -32,7 +33,8 @@ public class ListContactsFragment extends ListFragment  {
 
     ArrayList<Contact> contacts;
 
-    ListAdapter adapter;
+    ArrayAdapter<Contact> adapter;
+
     private Contact contactForDelete;
 
     AlertDialog dialogWaiting;
@@ -87,7 +89,8 @@ public class ListContactsFragment extends ListFragment  {
                         for (Contact el : con) {
                             contacts.add(el);
                         }
-                        setListAdapter(adapter);
+                        adapter.notifyDataSetChanged();
+                        //setListAdapter(adapter);
                     }
                     else {
                         System.out.println("public void handleMessage(android.os.Message msg) cast problems");
@@ -100,7 +103,8 @@ public class ListContactsFragment extends ListFragment  {
                     {
                         Toast.makeText(getActivity(),"Контакт удален", Toast.LENGTH_SHORT).show();
                         contacts.remove(contactForDelete);
-                        setListAdapter(adapter);
+                        adapter.notifyDataSetChanged();
+                        //setListAdapter(adapter);
                     }
                     else
                     {
@@ -148,6 +152,7 @@ public class ListContactsFragment extends ListFragment  {
         });
 
         dialogWaiting = dialogBuilder.create();
+        setListAdapter(adapter);
     }
 
 
@@ -159,7 +164,7 @@ public class ListContactsFragment extends ListFragment  {
     }
 
     @Override
-    public void onStart() { //вызывается каждый раз при появлении фрагмента (активности?)
+    public void onStart() { //вызывается каждый раз при появлении фрагмента
         super.onStart();
         model.getListContact();
     }

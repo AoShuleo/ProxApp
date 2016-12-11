@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 public class Model implements ModelOnClientInterface {
 
-    final boolean TESTSTAT = false;
+    final boolean TESTSTAT = true;
 
     RegistrationListener registrationListener;
     LoginMeListener loginMeListener;
@@ -56,7 +56,15 @@ public class Model implements ModelOnClientInterface {
         {
             public void run() //Этот метод будет выполняться в побочном потоке
             {
-                subSystemMSG.addContact(contact,reportListener);
+                if(TESTSTAT == false)
+                    subSystemMSG.addContact(contact,reportListener);
+                else {
+                    Contact contact1 = new Contact();
+                    contact1.login = "123";
+                    contact1.name = "Name123";
+                    contact1.status = 1;
+                    addContactListener.handlerEvent(contact1);
+                }
             }
         });
         myThready.start();	//Запуск потока
@@ -111,7 +119,7 @@ public class Model implements ModelOnClientInterface {
 
                     //Внимание, заглушка на успешное получение списка контактов
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(500);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -121,6 +129,8 @@ public class Model implements ModelOnClientInterface {
                         contact = new Contact();
                         contact.name = Integer.toString(i);
                         contact.login = "L" + contact.name;
+                        contact.status = i % 2;
+                        contact.countOfMes = contact.status * i*10;
                         contactArrayList.add(contact);
                     }
                     getListContactListener.handleEvent(contactArrayList);
@@ -186,14 +196,25 @@ public class Model implements ModelOnClientInterface {
     }
 
     @Override
-    public void getUpdateDialog(final Contact contact, GetListDialogListener listener) {
+    public void getUpdateDialog(final Contact contact, final GetListDialogListener listener) {
         final ReportListener reportListener = getReportListenerForListDialog(listener);
         //Создание потока
         Thread myThready = new Thread(new Runnable()
         {
             public void run() //Этот метод будет выполняться в побочном потоке
             {
-                subSystemMSG.requestUpdateDialog(contact,reportListener);
+                if(TESTSTAT == false)
+                    subSystemMSG.requestUpdateDialog(contact,reportListener);
+                else {
+                    ArrayList<Message> messages = new ArrayList<>();
+                    Message message = new Message();
+                    message.text = "TEST";
+                    message.contact = null;
+                    message.date = "fff";
+                    message.time = "ffffff";
+                    messages.add(message);
+                    listener.handlerEvent(messages);
+                }
             }
         });
         myThready.start();	//Запуск потока
@@ -215,8 +236,8 @@ public class Model implements ModelOnClientInterface {
             public void run() //Этот метод будет выполняться в побочном потоке
             {
                 if(TESTSTAT == false) {
-                    //subSystemMSG.loginMe(login, password, reportListener);
-                    subSystemMSG.loginMe("Tony", "123", reportListener);
+                    subSystemMSG.loginMe(login, password, reportListener);
+                    //subSystemMSG.loginMe("Tony", "123", reportListener);
                 }
                 else {
                     //заглушка
@@ -306,6 +327,90 @@ public class Model implements ModelOnClientInterface {
     public void regSendingCallBack(UniversalListener listener) {
         sendingCallBack = listener;
     }
+
+    @Override
+    public void setMyStatus(final int status, final UniversalListener listener) {
+        final ReportListener reportListener = new ReportListener() {
+            @Override
+            public void handler(Report report) {
+                listener.handlerEvent(report.type);
+            }
+        };
+        //Создание потока
+        Thread myThready = new Thread(new Runnable()
+        {
+            public void run() //Этот метод будет выполняться в побочном потоке
+            {
+                subSystemMSG.sendStatus(status,reportListener); // поменять константы
+            }
+        });
+        myThready.start();	//Запуск потока
+    }
+
+    @Override
+    public void getMyContact(final UniversalListenerWithObject listener) {
+        final ReportListener reportListener = new ReportListener() {
+            @Override
+            public void handler(Report report) {
+                listener.handlerEvent(report.type,report.data);
+            }
+        };
+        //Создание потока
+        Thread myThready = new Thread(new Runnable()
+        {
+            public void run() //Этот метод будет выполняться в побочном потоке
+            {
+                subSystemMSG.requestMyContact(reportListener);
+            }
+        });
+        myThready.start();	//Запуск потока
+    }
+
+    @Override
+    public void getUpdateContacts(final GetListContactListener listener) {
+        final ReportListener reportListener = new ReportListener() {
+            @Override
+            public void handler(Report report) {
+                if (report.type == Report.NO_UPDATES)
+                    listener.handleEvent(null);
+                else {
+                    ArrayList<Contact> contactArrayList = new ArrayList<>();
+                    String strListArr = (String) report.data;
+                    try {
+                        JSONObject jsonObj;
+                        JSONParser parser = new JSONParser();
+                        Object obj = parser.parse(strListArr);
+                        jsonObj = (JSONObject) obj;
+
+                        JSONArray arr = (JSONArray) jsonObj.get("friends");// new JSONArray();
+                        Iterator iter = arr.iterator();
+                        String cont;
+                        Contact contact;
+                        while (iter.hasNext()) {
+                            cont = (String) iter.next();
+                            contact = (Contact) JSONCoder.decode(cont, 2);
+                            contactArrayList.add(contact);
+                        }
+                        //System.out.println(arr.toString());
+                    } catch (Exception e) {
+                        System.out.println("public void getListContact()" + e.toString());
+                    }
+                    ;
+                    listener.handleEvent(contactArrayList);
+                }
+            }
+        };
+        //Создание потока
+        Thread myThready = new Thread(new Runnable()
+        {
+            public void run() //Этот метод будет выполняться в побочном потоке
+            {
+                subSystemMSG.requestUpdateContacts(reportListener);
+            }
+        });
+        myThready.start();	//Запуск потока
+    }
+
     //add 02.12
     @Override
     public void deleteContact(final Contact contact) {

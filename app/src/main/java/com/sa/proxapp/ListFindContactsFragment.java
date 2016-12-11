@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -38,7 +39,7 @@ public class ListFindContactsFragment extends Fragment {
 
     Model model;
     ArrayList<Contact> contacts;
-    ListAdapter adapter;
+    ArrayAdapter<Contact> adapter;
 
     View view;
     Button findButton;
@@ -85,7 +86,7 @@ public class ListFindContactsFragment extends Fragment {
                             for (Contact el : con) {
                                 contacts.add(el);
                             }
-                            listView.setAdapter(adapter);
+                            adapter.notifyDataSetChanged();
                         } else {
                             System.out.println("public void handleMessage(android.os.Message msg) cast problems");
                             throw new NullPointerException();
@@ -112,8 +113,7 @@ public class ListFindContactsFragment extends Fragment {
         findNameTextView = (TextView) view.findViewById(R.id.editText5);
         listView = (ListView) view.findViewById(R.id.list_contacts);
 
-        findLoginTextView.setText("");
-        findNameTextView.setText("");
+
 
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -175,12 +175,21 @@ public class ListFindContactsFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        findLoginTextView.setText("");
+        findNameTextView.setText("");
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         contacts = new ArrayList<>();
         adapter = new FindContactsAdapter(getActivity(),R.layout.list_element_find_contact,contacts);
         ((FindContactsAdapter) adapter).setActivity(getActivity());
+
+
     }
 
 

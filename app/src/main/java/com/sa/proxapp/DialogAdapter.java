@@ -27,6 +27,8 @@ public class DialogAdapter extends ArrayAdapter<Message> {
     int idRes;
     private Activity activity;
 
+    Contact toContact;
+
 
     public DialogAdapter(Context context, int resource, ArrayList<Message> objects) {
         super(context, resource, objects);
@@ -51,7 +53,10 @@ public class DialogAdapter extends ArrayAdapter<Message> {
         TextView messagaTextView = (TextView) convertView.findViewById(R.id.message_textview);
         TextView dateTime = (TextView) convertView.findViewById(R.id.date_time_textview);
 
-        fromUser.setText(message.contact.login + " написал:");
+        if(message.contact != null)
+            fromUser.setText(message.contact.login + " написал:");
+        else
+            fromUser.setText(toContact.login + " написал:");
         messagaTextView.setText(message.text);
         dateTime.setText(message.time + " " + message.date);
 

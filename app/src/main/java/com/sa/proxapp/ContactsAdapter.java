@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.PopupMenu;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,8 +61,27 @@ public class ContactsAdapter extends ArrayAdapter<Contact>{
             }
             TextView lab1 = (TextView) convertView.findViewById(R.id.label_el);
             TextView lab2 = (TextView) convertView.findViewById(R.id.label_el2);
+        RadioButton statusRadio = (RadioButton) convertView.findViewById(R.id.statusRButton);
+        TextView unReadMes = (TextView) convertView.findViewById(R.id.count_mes);
+
             lab1.setText(cont.login);
             lab2.setText(cont.name);
+        if(cont.status != 0)
+            statusRadio.setChecked(true);
+        else
+            statusRadio.setChecked(false);
+        if(cont.countOfMes > 0)
+        {
+            String num = Integer.toString(cont.countOfMes);
+            StringBuilder builder = new StringBuilder(num);
+            if(num.length() > 2)
+                builder.insert(2,"\n");
+            builder.insert(1,"\n");
+            num = builder.toString();
+            unReadMes.setText(num);
+        }
+        else
+            unReadMes.setText("");
 
             //if(position + 1 == contactArrayList.size())
             //    convertView.

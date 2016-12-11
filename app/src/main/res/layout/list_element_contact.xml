@@ -12,7 +12,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="6"
-        android:layout_margin="@dimen/activity_horizontal_margin">
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_vertical_margin">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -55,7 +59,6 @@
                 android:layout_width="wrap_content"
                 tools:layout_editor_absoluteY="51dp"
                 tools:layout_editor_absoluteX="21dp"
-                android:elevation="1dp"
                 android:gravity="right"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
@@ -94,11 +97,39 @@
 
     </LinearLayout>
 
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/count_mes"
+        android:layout_weight="0.7"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:gravity="center_vertical|center_horizontal"
+        android:textColor="@color/colorPrimaryDark"
+        android:text="2\n5"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <RadioButton
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/statusRButton"
+        android:layout_weight="0.76"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:focusable="false"
+        android:clickable="false"
+        android:duplicateParentState="false"
+        android:gravity="center_vertical|center_horizontal"
+        android:checked="false" />
+
     <FrameLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_marginTop="@dimen/activity_vertical_margin">
+        android:layout_weight="1.5"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:layout_marginBottom="@dimen/activity_vertical_margin">
 
         <Button
             android:id="@+id/extar_button_on_contact"

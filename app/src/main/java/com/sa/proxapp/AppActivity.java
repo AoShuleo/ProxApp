@@ -4,10 +4,12 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+
 
 import com.sa.proxapp.com.sa.ClientClass.Contact;
 import com.sa.proxapp.com.sa.ClientClass.Model;
@@ -27,6 +29,7 @@ public class AppActivity extends AppCompatActivity
             fab.hide();
             dialogFragment.curContact = contact;
 
+            setTitle("Диалог с " + contact.login);
             FragmentTransaction transaction = fragmentManager.beginTransaction();
             transaction.replace(R.id.container, dialogFragment);
             transaction.addToBackStack(null);
@@ -39,13 +42,13 @@ public class AppActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app);
+        setTitle("Список контактов");
 
         fragmentManager = getFragmentManager();
 
         findContactsFragment = new ListFindContactsFragment();
         listContactsFragment = new ListContactsFragment();
         dialogFragment = new DialogFragment();
-
 
         listContactsFragment.clickContact = onClickContact;
 
@@ -58,6 +61,7 @@ public class AppActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
 
+                setTitle("Поиск контакта");
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.container, findContactsFragment);
                 transaction.addToBackStack(null);
@@ -86,6 +90,7 @@ public class AppActivity extends AppCompatActivity
         }*/
         super.onBackPressed();
         fab.show();
+        setTitle("Список контактов");
     }
 
 

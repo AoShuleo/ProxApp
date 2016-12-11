@@ -15,4 +15,8 @@ public interface SubSystemMSGInterface {
     void sendMessage(Message message, ReportListener reportListener);//06.12//+
     void requestDialog(Contact contact, ReportListener reportListener);//06.12//+
     void requestUpdateDialog(Contact contact,ReportListener reportListener);//06.12//
+
+    void sendStatus(int status, ReportListener reportListener);
+    void requestMyContact(ReportListener reportListener);
+    void requestUpdateContacts(ReportListener reportListener);
 }

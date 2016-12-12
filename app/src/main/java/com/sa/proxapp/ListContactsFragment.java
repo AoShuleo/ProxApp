@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.sa.proxapp.com.sa.ClientClass.Contact;
 import com.sa.proxapp.com.sa.ClientClass.GetListContactListener;
+import com.sa.proxapp.com.sa.ClientClass.GetListDialogListener;
 import com.sa.proxapp.com.sa.ClientClass.Model;
 import com.sa.proxapp.com.sa.ClientClass.Report;
 import com.sa.proxapp.com.sa.ClientClass.UniversalListener;
@@ -45,6 +46,29 @@ public class ListContactsFragment extends ListFragment  {
     }
     OnClickContact clickContact;
 
+    Thread updateThread;
+    Runnable updateThreadInt = new Runnable() {
+        @Override
+        public void run() {
+            System.out.println("START");
+            try {
+                while (!Thread.interrupted()) {
+                    Thread.sleep(1000);
+                    System.out.println("Update");
+                    model.getUpdateContacts(new GetListContactListener() {
+                        @Override
+                        public void handleEvent(ArrayList<Contact> contactArrayList) {
+                            if(contactArrayList != null)
+                                System.out.println(contactArrayList.toString());
+                        }
+                    });
+                }
+            } catch (InterruptedException e) {
+                System.out.println("STOP");
+            }
+        }
+    };
+
 
     public ListContactsFragment() {
         super();
@@ -57,7 +81,8 @@ public class ListContactsFragment extends ListFragment  {
                 Message message = new Message();
                 message.arg1 = 0;
                 message.obj = contactArrayList;
-                mHandler.sendMessage(message);
+                if(contactArrayList != null)
+                    mHandler.sendMessage(message);
             }
         });
 
@@ -91,6 +116,8 @@ public class ListContactsFragment extends ListFragment  {
                         }
                         adapter.notifyDataSetChanged();
                         //setListAdapter(adapter);
+                        updateThread = new Thread(updateThreadInt);
+                        updateThread.start();
                     }
                     else {
                         System.out.println("public void handleMessage(android.os.Message msg) cast problems");
@@ -163,10 +190,19 @@ public class ListContactsFragment extends ListFragment  {
 
     }
 
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(updateThread != null)
+            updateThread.interrupt();
+    }
+
     @Override
     public void onStart() { //вызывается каждый раз при появлении фрагмента
         super.onStart();
         model.getListContact();
+
     }
 
     @Override

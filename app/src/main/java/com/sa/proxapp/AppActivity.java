@@ -1,18 +1,30 @@
 package com.sa.proxapp;
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.sa.proxapp.com.sa.ClientClass.Contact;
+import com.sa.proxapp.com.sa.ClientClass.Message;
 import com.sa.proxapp.com.sa.ClientClass.Model;
+import com.sa.proxapp.com.sa.ClientClass.UniversalListener;
+import com.sa.proxapp.com.sa.ClientClass.UniversalListenerWithObject;
+
+import java.util.ArrayList;
 
 public class AppActivity extends AppCompatActivity
 {
@@ -22,6 +34,10 @@ public class AppActivity extends AppCompatActivity
     ListContactsFragment listContactsFragment;
     ListFindContactsFragment findContactsFragment;
     DialogFragment dialogFragment;
+
+    Model model = new Model();
+    boolean firstStart = true;
+    Activity activity = this;
 
     ListContactsFragment.OnClickContact onClickContact = new ListContactsFragment.OnClickContact() {
         @Override
@@ -35,6 +51,39 @@ public class AppActivity extends AppCompatActivity
             transaction.addToBackStack(null);
             transaction.commit();
 
+        }
+    };
+
+
+    android.os.Handler mHandler = new android.os.Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(android.os.Message msg) {
+            switch (msg.arg1)
+            {
+                case 20:
+                    Contact contact = (Contact)msg.obj;
+                    AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+
+                    LayoutInflater inflater = getLayoutInflater();
+                    View view = inflater.inflate(R.layout.info_contact_dialog,null);
+                    TextView iLogin = (TextView)view.findViewById(R.id.info_login);
+                    TextView iName = (TextView)view.findViewById(R.id.info_name);
+
+                    iLogin.setText(contact.login);
+                    iName.setText(contact.name);
+
+                    builder.setView(view);
+                    builder.setTitle("Информация о себе");
+                    builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+                    break;
+            }
         }
     };
 
@@ -109,7 +158,19 @@ public class AppActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_my_contact) {
+            model.getMyContact(new UniversalListenerWithObject() {
+                @Override
+                public void handlerEvent(int typeResponse, Object object) {
+                    if(object != null)
+                    {
+                        android.os.Message message = new android.os.Message();
+                        message.obj = object;
+                        message.arg1 = 20;
+                        mHandler.sendMessage(message);
+                    }
+                }
+            });
             return true;
         }
 
@@ -140,4 +201,29 @@ public class AppActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }*/
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        model.setMyStatus(0, new UniversalListener() {
+            @Override
+            public void handlerEvent(int typeResponse) {
+
+            }
+        });
+        firstStart = false;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(!firstStart) {
+            model.setMyStatus(1, new UniversalListener() {
+                @Override
+                public void handlerEvent(int typeResponse) {
+                    System.out.println(typeResponse);
+                }
+            });
+        }
+    }
 }

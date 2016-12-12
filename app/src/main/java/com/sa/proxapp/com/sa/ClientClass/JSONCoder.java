@@ -5,10 +5,10 @@ import com.sa.proxapp.com.sa.ClientClass.simple.parser.JSONParser;
 
 public class JSONCoder {
 
-    //внимание, изменить + не должны быть одинаковыми
-    static final String idStatus = "1";
-    static final String idCountOfMes = "2";
 
+    //внимание, изменить + не должны быть одинаковыми
+    static final String idStatus = "status";
+    static final String idCountOfMes = "countOfMes";
 
     public static Object decode(String string, int t) // t = 1 - message, t = 2 - contact
     {
@@ -32,8 +32,10 @@ public class JSONCoder {
                 contact.login = (String) jsonObj.get("login");
                 contact.name = (String) jsonObj.get("name");
                 contact.password = (String) jsonObj.get("password");
-                contact.status = (int) jsonObj.get(idStatus);
-                contact.countOfMes = (int) jsonObj.get(idCountOfMes);
+                Long tem1 = (Long)jsonObj.get(idStatus);
+                Long tem2 = (Long)jsonObj.get(idCountOfMes);
+                contact.status = tem1.intValue();
+                contact.countOfMes = tem2.intValue();
                 return contact;
             }
         } catch (Exception e) {
@@ -81,9 +83,9 @@ public class JSONCoder {
         JSONObject resultJson = new JSONObject();
         resultJson.put("login", contact.login);
         resultJson.put("name", contact.name);
+        resultJson.put("password", contact.password);
         resultJson.put(idStatus, contact.status);
         resultJson.put(idCountOfMes,contact.countOfMes);
-        resultJson.put("password", contact.password);
         return resultJson.toJSONString();
     }
     public static String encode(Report report)
@@ -102,7 +104,5 @@ public class JSONCoder {
         resultJson.put("data", data);
         return resultJson.toJSONString();
     }
-
-
 
 }

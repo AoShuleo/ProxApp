@@ -352,7 +352,7 @@ public class Model implements ModelOnClientInterface {
         final ReportListener reportListener = new ReportListener() {
             @Override
             public void handler(Report report) {
-                listener.handlerEvent(report.type,report.data);
+                listener.handlerEvent(report.type,JSONCoder.decode((String)report.data,Report.CONTACT));
             }
         };
         //Создание потока
@@ -360,7 +360,15 @@ public class Model implements ModelOnClientInterface {
         {
             public void run() //Этот метод будет выполняться в побочном потоке
             {
-                subSystemMSG.requestMyContact(reportListener);
+                if(TESTSTAT == false)
+                    subSystemMSG.requestMyContact(reportListener);
+                else
+                {
+                    Contact contact = new Contact();
+                    contact.login = "LMy";
+                    contact.name = "NameMy";
+                    listener.handlerEvent(0,contact);
+                }
             }
         });
         myThready.start();	//Запуск потока

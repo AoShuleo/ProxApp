@@ -47,14 +47,17 @@ public class SubSystemMSG implements SubSystemMSGInterface{
             }
             connection.setDoOutput(true);
 
-            DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
-            wr.writeBytes(stringReport);
-            wr.flush();
-            wr.close();
-
-            connection.connect();
+            //DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
+            //wr.writeBytes(stringReport);
 
             OutputStream outputStream = connection.getOutputStream();
+            outputStream.write(stringReport.getBytes("UTF-8"));
+            outputStream.flush();
+            outputStream.close();
+            //wr.flush();
+            //wr.close();
+
+            connection.connect();
 
             //Прослушка ответа+
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
